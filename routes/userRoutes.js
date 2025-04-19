@@ -1,8 +1,8 @@
 const express = require("express");
 const userRouter = express.Router();
 
-userRouter.get("/findUser/:userId",isAdmin, findUser);
-userRouter.post("/updateUser/:userId",userAuth,updateUser);
-userRouter.delete("/deleteUser/:userId",userAuth, deleteUser);
+userRouter.get("/user",isAdmin, findUser);
+userRouter.post("/user",userAuth,updateUser);
+userRouter.delete("/user/:userId",userAuth, deleteUser);
 
 module.exports = userRouter;

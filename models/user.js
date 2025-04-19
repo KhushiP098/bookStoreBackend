@@ -31,6 +31,9 @@ const userSchema=new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Book"
     }],
+    isDeleted:{
+        type:Date
+    }
 },{
     timestamps:true,
 })

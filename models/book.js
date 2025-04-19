@@ -29,7 +29,10 @@ const bookSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.objectId,
         ref: "User"
       }
-    ]
+    ],
+    isDeleted:{
+      type:Date
+    }
   },
   {
     timestamps: true

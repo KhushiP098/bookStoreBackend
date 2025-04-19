@@ -10,7 +10,7 @@ router.use("/auth", authRoutes);
 
 
 // router.use("/book", bookRoutes);
-// router.use("/user", userRoutes);
+// router.use("/users", userRoutes);
 // router.use("/author", authorRoutes);
 
 module.exports = router;

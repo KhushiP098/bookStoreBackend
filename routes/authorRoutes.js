@@ -1,8 +1,8 @@
 const express = require("express");
 const AuthorRouter = express.Router();
 
-AuthorRouter.get("/findAuthor/:authorId", findAuthor);
-AuthorRouter.post("/updateAuthor/:authorId",isAdmin, updateAuthor);
-AuthorRouter.delete("/deleteAuthor/:authorId",isAdmin, deleteAuthor);
+AuthorRouter.get("/author/:authorId", getAuthor);
+AuthorRouter.post("/author/:authorId",isAdmin, updateAuthor);
+AuthorRouter.delete("/author/:authorId",isAdmin, deleteAuthor);
 
 module.exports = AuthorRouter;

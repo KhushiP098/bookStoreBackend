@@ -22,11 +22,10 @@ async function sendEmail({OTP,emailId,token}){
             text:`OTP for changing the password is ${OTP}.Click the link given below and enter the otp. Link-${url}.This  otp is valid for only 15 minutes`
         }
         const response=transporter.sendMail(mailOptions);
-        return new ApiResponse(200,"Email sent!",response.envelope);
+        return response.envelope;
     }
     catch(error){
         return new ApiError(500,"Can't send email!")
-
     }
 }
 module.exports=sendEmail;
