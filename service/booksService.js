@@ -1,6 +1,5 @@
 const Book = require("../models/book");
 const ApiError = require("../utils/apiUtils/apiError");
-const ApiResponse = require("../utils/apiUtils/apiResponse");
 
 async function findBookService(req) {
     const queryObject = {};
@@ -12,7 +11,7 @@ async function findBookService(req) {
     if (author) queryObject.author = author;
 
     const books = await Book.find(queryObject);
-    if (!books.length) throw new ApiError("No books found",404);
+    if (!books.length) return new ApiError("No books found",404);
     return books;
 
 }
@@ -20,7 +19,7 @@ async function findBookService(req) {
 async function addBookService(req) {
     const { bookName, category, author, price, imageUrl } = req.body;
     if ((!price || !bookName || !category || !author))
-       throw new Error(400, "All fields are required");
+       return new Error(400, "All fields are required");
 
     const newBook = new Book({ bookName, category, author, price ,imageUrl });
     await newBook.save();
@@ -33,7 +32,7 @@ async function updateBookService(req) {
     const { bookName, category, author, price, bookImage } = req.body;
 
     const existingBook = await Book.findById(bookId);
-    if (!existingBook) throw new ApiError("There is no book with this id!");
+    if (!existingBook) return new ApiError("There is no book with this id!");
 
     const updatedBook = await Book.findOneAndUpdate({ _id: bookId }, req.body, {new: true});
     return updatedBook;
@@ -43,7 +42,7 @@ async function deleteBookService(req) {
 
     const { bookId } = req.params;
     const book = await Book.findOneAndUpdate({ _id: bookId },{isDeleted:new Date.now()});
-    if(!book)throw new ApiError("No book found");
+    if(!book)return new ApiError("No book found");
     return  book;
 
 }

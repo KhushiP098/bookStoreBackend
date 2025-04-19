@@ -5,10 +5,10 @@ const ApiResponse=require("./apiUtils/apiResponse")
 function generateOtp(){
     try{
         const OTP = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
-        return ApiResponse(200,"OTP generated",OTP)
+        return OTP
     }
     catch(error){
-        return ApiError(500,"Error in generating otp!")
+        return ApiError("Error in generating otp!",500)
     }
 }
 

@@ -1,24 +1,23 @@
 const bcrypt=require("bcrypt");
 const ApiError = require("./apiUtils/apiError");
-const ApiResponse=require("./apiUtils/apiResponse")
 
 async function createHash(payload){
     try{
         const hashedPassword= await bcrypt.hash(payload,10);
-        return new ApiResponse(200,"password hash created succesfully",hashedPassword)
+        return hashedPassword;
     }
     catch(error){
-        return new ApiError(500,"Failed to create hash of password")
+        return new ApiError("Failed to create hash of password",500)
     }
 }
 
 async function verifyHash(password,hashedPassword){
     try{
         const isValid= await bcrypt.compare(password,hashedPassword);
-        return new ApiResponse(200,"password matched",isValid);
+        return isValid;
     }
     catch(error){
-        return new ApiError(400,"Invalid credentials")
+        return new ApiError("Invalid credentials",400)
     }
 }
 

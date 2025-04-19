@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const ApiResponse = require("./apiUtils/apiResponse");
 const ApiError = require("./apiUtils/apiError")
 
 function createAccessToken(payload) {
@@ -14,20 +13,20 @@ function createRefreshToken(payload) {
 function verifyRefreshToken(token) {
     try {
         const token = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET_KEY);
-        return ApiResponse(200, " Token is valid", token);
+        return token;
     }
     catch (error) {
-        return ApiError(400, "Refresh Token is invalid")
+        return ApiError( "Refresh Token is invalid",400)
     }
 }
 
 function verifyAccessToken(token) {
     try {
         const token = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
-        return ApiResponse(200, "Token is valid", token);
+        return token;
     }
     catch (error) {
-        return ApiError(400, "Access Token is invalid")
+        return ApiError( "Access Token is invalid",400)
     }
 }
 

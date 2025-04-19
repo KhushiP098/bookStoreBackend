@@ -1,41 +1,24 @@
 const { loginService, signupService, updatePasswordService, forgotPasswordService, verifyOTPService, changePasswordService } = require("../service/authService")
-const ApiResponse = require("../utils/apiUtils/apiResponse")
 const ApiError = require("../utils/apiUtils/apiError")
 const { createAccessToken, verifyRefreshToken } = require("../utils/token")
 
 async function login(req, res) {
     try {
         const loginResponse = await loginService(req, res);
-
-        return res.status(200).json({
-            success: true,
-            message: "LOGGED In",
-            data: loginResponse
-        })
+        return res.status(200).json({success: true, message: "LOGGED In", data: loginResponse})
     }
     catch (error) {
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            message: error.message
-        })
+        return res.status(error.statusCode).json({success: false,message: error.message})
     }
 }
 
 async function signup(req, res) {
     try {
         const signupResponse = await signupService(req);
-
-        return res.status(200).json({
-            success: true,
-            message: "User Registered",
-            data: signupResponse
-        })
+        return res.status(200).json({ success: true,message: "User Registered",data: signupResponse})
     }
     catch (error) {
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            message: error.message
-        })
+        return res.status(error.statusCode).json({success: false,message: error.message})
     }
 }
 
