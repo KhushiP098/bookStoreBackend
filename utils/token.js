@@ -16,7 +16,7 @@ function verifyRefreshToken(token) {
         return token;
     }
     catch (error) {
-        return ApiError( "Refresh Token is invalid",400)
+        return "Refresh Token is invalid";
     }
 }
 
@@ -26,7 +26,7 @@ function verifyAccessToken(token) {
         return token;
     }
     catch (error) {
-        return ApiError( "Access Token is invalid",400)
+        return "Access Token is invalid";
     }
 }
 

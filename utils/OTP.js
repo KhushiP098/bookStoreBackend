@@ -8,7 +8,7 @@ function generateOtp(){
         return OTP
     }
     catch(error){
-        return ApiError("Error in generating otp!",500)
+        return "Error in generating otp!"
     }
 }
 

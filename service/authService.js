@@ -13,7 +13,6 @@ async function loginService(req, res) {
         if (!existingUser) return new ApiError("Invalid credentials!", 400);
 
         const isValidPassword = await verifyHash(password, existingUser.password);
-        if (!isValidPassword.success) return isValidPassword;
         console.log("isValidpassword", isValidPassword);
 
         const accessToken = createAccessToken({ _id: existingUser._id });
@@ -30,9 +29,8 @@ async function signupService(req, res) {
         if (existingUser) return new ApiError("This email already exists!", 400);
 
         const hashedPassword = await createHash(password);
-        if (!hashedPassword.success) return hashedPassword;
 
-        const newUser = new User({ userName, emailId, password: hashedPassword.data, role });
+        const newUser = new User({ userName, emailId, password: hashedPassword, role });
         await newUser.save();
         newUser.password = undefined;
         console.log("new user", newUser)
@@ -47,9 +45,8 @@ async function updatePasswordService(req, res) {
         if (!existingUser) return new ApiError("User does not exist!", 400);
 
         const hashedPassword = await createHash(newPassword);
-        if (!hashedPassword.success) return hashedPassword;
 
-        const newUser = await User.find({ emailId }, { password: hashedPassword.data });
+        const newUser = await User.find({ emailId }, { password: hashedPassword});
         newUser.password = undefined;
         return newUser;
 }
@@ -61,11 +58,9 @@ async function forgotPasswordService(req, res) {
         if (!existingUser) return new ApiError("Invalid credentials", 400);
 
         const otpResponse = generateOtp();
-        if (!otp.success) return otpResponse;
         console.log("otp response", otpResponse)
 
-        const otp = otpResponse.data.otp;
-
+        const otp = otpResponse;
         const token = createAccessToken({ _id: existingUser._id });
 
         const emailResponse = await sendEmail({ OTP: otp, emailId: emailId, token: token })
@@ -83,14 +78,9 @@ async function verifyOTPService(req) {
         const { token } = req.params;
 
         const isValidToken = verifyAccessToken(token);
-        if (!isValidToken.success) return new ApiError("Token is not valid", 401);
-        const { _id } = isValidToken.data
-
-        const existingUser = await User.findById({ _id });
+        const existingUser = await User.findById({_id: isValidToken._id });
 
         const isValidOtp = verifyHash(OTP, existingUser.otp);
-        if (!isValidToken.success) return new ApiError("Invalid OTP!", 400);
-
         return "OTP matched!";
 
 }
@@ -102,11 +92,8 @@ async function changePasswordService(req) {
         if (!existingUser) return new ApiError("user does not exist!", 404);
 
         const newPasswordHash = await createHash(newPassword);
-        if (!newPasswordHash.success) return new ApiError("Couldn't create password hash", 500);
 
-        const hashedPassword = newPasswordHash.data;
-
-        const updatedUser = await User.findOneAndUpdate({ emailId }, { password: hashedPassword }, { new: true })
+        const updatedUser = await User.findOneAndUpdate({ emailId }, { password: newPasswordHash }, { new: true })
         return "Password changed!";
 }
 
