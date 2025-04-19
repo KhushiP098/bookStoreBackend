@@ -5,7 +5,7 @@ async function createHash(payload){
         return hashedPassword;
     }
     catch(error){
-        return "Failed to create hash of password";
+        return false;
     }
 }
 
@@ -15,7 +15,7 @@ async function verifyHash(password,hashedPassword){
         return isValid;
     }
     catch(error){
-        return "Invalid credentials";
+        return false;;
     }
 }
 

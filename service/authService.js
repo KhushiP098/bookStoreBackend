@@ -13,7 +13,7 @@ async function loginService(req, res) {
         if (!existingUser) return new ApiError("Invalid credentials!", 400);
 
         const isValidPassword = await verifyHash(password, existingUser.password);
-        console.log("isValidpassword", isValidPassword);
+        if(!isValidPassword)return new ApiError("Invalid credentials");
 
         const accessToken = createAccessToken({ _id: existingUser._id });
         const refreshToken = createRefreshToken({ _id: existingUser._id });
@@ -29,6 +29,7 @@ async function signupService(req, res) {
         if (existingUser) return new ApiError("This email already exists!", 400);
 
         const hashedPassword = await createHash(password);
+        if(!hashedPassword)return new ApiError("Failed to create hash")
 
         const newUser = new User({ userName, emailId, password: hashedPassword, role });
         await newUser.save();
@@ -45,6 +46,7 @@ async function updatePasswordService(req, res) {
         if (!existingUser) return new ApiError("User does not exist!", 400);
 
         const hashedPassword = await createHash(newPassword);
+        if(!hashedPassword)return new ApiError("failed to create hash")
 
         const newUser = await User.find({ emailId }, { password: hashedPassword});
         newUser.password = undefined;
@@ -78,6 +80,7 @@ async function verifyOTPService(req) {
         const { token } = req.params;
 
         const isValidToken = verifyAccessToken(token);
+        if(!isValidToken)return new ApiError("Token is invalid",400);
         const existingUser = await User.findById({_id: isValidToken._id });
 
         const isValidOtp = verifyHash(OTP, existingUser.otp);
@@ -92,6 +95,7 @@ async function changePasswordService(req) {
         if (!existingUser) return new ApiError("user does not exist!", 404);
 
         const newPasswordHash = await createHash(newPassword);
+        if(!newPasswordHash)return new ApiError("Failed to create hash of password");
 
         const updatedUser = await User.findOneAndUpdate({ emailId }, { password: newPasswordHash }, { new: true })
         return "Password changed!";

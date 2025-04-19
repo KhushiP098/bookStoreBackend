@@ -26,7 +26,7 @@ function verifyAccessToken(token) {
         return token;
     }
     catch (error) {
-        return "Access Token is invalid";
+        return false;
     }
 }
 
